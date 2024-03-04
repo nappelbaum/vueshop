@@ -7,6 +7,8 @@ import PostService from './API/PostService.vue'
 import LocalStorage from './localStorage/LocalStorage.vue'
 import copy from './hooks/Copy.vue'
 
+// before vuex
+
 const cart = reactive([])
 const drawerCartItem = ref({})
 const drawerOpen = ref(false)
