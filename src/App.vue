@@ -30,9 +30,6 @@ const fetchItemsForCart = async () => {
   const localCart = LocalStorage.getCart()
   const localIds = Array.from(new Set(localCart.map((el) => el.id))).join(',')
 
-  const extraItems = cart.filter((el) => !localIds.includes(el.id))
-  if (extraItems.length) extraItems.forEach((el) => cart.splice(cart.indexOf(el), 1))
-
   const itemsForCart = await PostService.getItemsForCart(localIds)
   cart.length = 0
 

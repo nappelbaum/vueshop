@@ -6,13 +6,12 @@ import ShopCategories from '../components/ShopCategories.vue'
 import ShopProducts from '../components/ShopProducts.vue'
 import SearchInput from '../components/SearchInput.vue'
 import PostService from '../API/PostService.vue'
+import store from '@/store'
 
 const route = useRoute()
 const { openDrawer, addToCart, clearCart } = inject('cart')
 
 const categories = ref([])
-const items = ref([])
-const itemsErr = ref('')
 
 const filters = reactive({
   sortBy: '',
@@ -36,10 +35,10 @@ const fetchCategories = async () => {
 }
 
 const fetchItems = async () => {
-  const data = await PostService.getItems(filters)
-  if (Array.isArray(data)) items.value = data
-  else itemsErr.value = data
+  await store.dispatch('fetchProducts', filters)
 }
+const items = computed(() => store.getters.allProducts)
+const itemsErr = computed(() => store.getters.productsErr)
 
 onMounted(() => {
   fetchCategories()

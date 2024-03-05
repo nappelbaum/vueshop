@@ -1,6 +1,5 @@
 <script setup>
 import ShopCat from './ShopCat.vue'
-// import PreLoad from './PreLoad.vue'
 import PreLoad from './PreLoadC.vue'
 defineProps({
   categories: Array

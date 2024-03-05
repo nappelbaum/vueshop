@@ -1,9 +1,31 @@
 <script setup>
 import { inject } from 'vue'
 import Convert from '../../hooks/Convert.vue'
+// import store from '@/store'
 
 const cartTotal = inject('cartTotal')
+
+// const allProducts = computed(() => {
+//   return store.getters.allProducts
+// })
+
+// onMounted(async () => {
+//   await store.dispatch('fetchProducts', { sortBy: 'PRICE_ASC', searchQuery: '' })
+//   console.log(allProducts.value)
+// })
 </script>
+
+<!-- <script>
+export default {
+  name: 'MainCart',
+  computed: mapGetters(['allProducts']),
+  methods: mapActions(['fetchProducts']),
+  async mounted() {
+    await this.fetchProducts()
+    console.log(this.allProducts)
+  }
+}
+</script> -->
 
 <template>
   <router-link

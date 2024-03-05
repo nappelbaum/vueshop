@@ -19,7 +19,7 @@ export default class PostService {
       return res.data.items
     } catch (err) {
       console.log(err)
-      return err.message
+      return { err: err.message }
     }
   }
 

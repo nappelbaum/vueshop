@@ -3,6 +3,7 @@ import { onMounted, ref, inject, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import PostService from '../API/PostService.vue'
 import resetSelectOptions from '../hooks/ResetSelect.vue'
+import store from '@/store'
 
 const route = useRoute()
 const router = useRouter()
@@ -86,7 +87,9 @@ watch(cart, () => {
 })
 
 onMounted(async () => {
-  await fetchProduct()
+  if (store.getters.allProducts.length) {
+    product.value = store.getters.allProducts.find((item) => item.id === +id)
+  } else await fetchProduct()
 
   document.title = product.value.seoTitle
   document
