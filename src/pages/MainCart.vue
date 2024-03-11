@@ -8,6 +8,7 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 
 onMounted(() => {
+  window.scrollTo({ top: 0 })
   document.title = route.meta.title
 })
 

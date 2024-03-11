@@ -9,7 +9,7 @@ import PostService from '../API/PostService.vue'
 import store from '@/store'
 
 const route = useRoute()
-const { openDrawer, addToCart, clearCart } = inject('cart')
+const { drawerOpen, openDrawer, addToCart, clearCart } = inject('cart')
 
 const categories = ref([])
 
@@ -58,7 +58,7 @@ watch(filters, fetchItems)
       <div class="my-5 flex flex-col gap-y-3 sm:flex-row justify-center gap-x-2 lg:justify-end">
         <SearchInput @onChangeSearchInput="onChangeSearchInput" />
         <select
-          class="font-body px-2 py-1 outline-none border rounded-md text-base font-normal bg-transparent shop__select"
+          class="font-body px-2 py-1.5 sm:py-1 outline-none border rounded-md text-base font-normal bg-transparent shop__select"
           @change="onChangeSelect"
         >
           <option value>{{ selectText }}</option>
@@ -70,6 +70,7 @@ watch(filters, fetchItems)
       <ShopProducts
         v-if="items.length"
         :items="items"
+        :drawerOpen="drawerOpen"
         @open-drawer="openDrawer"
         @addToCart="addToCart"
         @clearCart="clearCart"

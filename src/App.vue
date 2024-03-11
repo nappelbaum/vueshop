@@ -1,11 +1,12 @@
 <script setup>
-import { reactive, ref, provide, computed, onMounted } from 'vue'
+import { reactive, ref, provide, computed, onMounted, watch } from 'vue'
 import ShopHeader from './components/ShopHeader.vue'
 import CartDrawer from './components/CartDrawer.vue'
 import MyFooter from './components/MyFooter.vue'
 import PostService from './API/PostService.vue'
 import LocalStorage from './localStorage/LocalStorage.vue'
 import copy from './hooks/Copy.vue'
+import store from './store'
 
 // before vuex
 
@@ -81,17 +82,45 @@ const deleteCartItem = (cartIndex) => {
   setStorage()
 }
 
+const isAuth = computed(() => store.getters.isAuth)
+const user = computed(() => store.getters.user)
+const getUser = async () => {
+  const formData = new FormData()
+  formData.append('postName', 'getUser')
+  await store.dispatch('getUser', formData)
+}
+
+const bc = new BroadcastChannel('auth_channel')
+
 onMounted(() => {
   fetchItemsForCart()
 
   window.addEventListener('storage', () => {
     fetchItemsForCart()
   })
+
+  getUser()
+
+  bc.addEventListener('message', function (e) {
+    store.dispatch('updateAuthData', e.data)
+  })
+
+  window.addEventListener('popstate', () => {
+    drawerOpen.value = false
+  })
+})
+
+watch(isAuth, () => {
+  bc.postMessage({ ...user.value, isAuth: isAuth.value })
+})
+watch(drawerOpen, () => {
+  document.body.style.overflow = drawerOpen.value ? 'hidden' : 'visible'
 })
 
 provide('cart', {
   cart,
   drawerCartItem,
+  drawerOpen,
   closeDrawer,
   openDrawer,
   addToCart,
@@ -114,7 +143,7 @@ provide('cartTotal', setTotalCart)
   <main class="my-8">
     <router-view></router-view>
   </main>
-  <MyFooter />
+  <MyFooter class="mt-auto" />
 </template>
 
 <style>

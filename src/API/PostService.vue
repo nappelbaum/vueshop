@@ -84,5 +84,14 @@ export default class PostService {
       return {}
     }
   }
+
+  static async authAPI(data) {
+    try {
+      const res = await axios.post('https://vueshop.bohohome.ru/php/test.php', data)
+      return res.data
+    } catch (err) {
+      return err.message
+    }
+  }
 }
 </script>

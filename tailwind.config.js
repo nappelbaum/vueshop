@@ -40,5 +40,5 @@ export default {
       ...defaultTheme.screens
     }
   },
-  plugins: []
+  plugins: ['@tailwindcss/forms']
 }

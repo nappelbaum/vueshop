@@ -1,6 +1,7 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import ShopProd from './ShopProd.vue'
+import { swipe } from '../hooks/swipe'
 
 defineProps({
   drawerOpen: Boolean,
@@ -11,26 +12,31 @@ const emit = defineEmits(['closeDrawer'])
 
 const drawerMain = ref(null)
 const drawerBG = ref(null)
+const drawerSwipe = ref(null)
 
-const closeDrawerGap = () => {
-  drawerMain.value.classList.add('animate-drawerTranslateBack')
+const closeDrawerGap = (swipe) => {
+  drawerMain.value.classList.add(swipe ? 'animate-after-swipe' : 'animate-drawerTranslateBack')
   drawerBG.value.classList.add('animate-drawerOpacityBack')
   setTimeout(() => emit('closeDrawer'), 500)
 }
+
+onMounted(() => {
+  swipe(drawerSwipe.value, { maxTime: 1000, minTime: 100, maxDist: 150, minDist: 60 })
+})
 </script>
 
 <template>
   <div
     ref="drawerBG"
     class="fixed top-0 left-0 h-full w-full bg-black z-10 animate-drawerOpacity"
-    @click="closeDrawerGap"
+    @click="closeDrawerGap(false)"
   ></div>
   <div
     ref="drawerMain"
-    class="flex-col justify-between bg-white w-full xs:w-96 h-full fixed right-0 top-0 z-20 p-8 animate-drawerTranslate transition-transform"
+    class="flex flex-col justify-between bg-white w-full xs:w-96 h-screen fixed right-0 top-0 z-20 p-8 animate-drawerTranslate transition-transform select-none"
   >
     <div>
-      <div class="flex items-center justify-center gap-5 mb-5" @click="closeDrawerGap">
+      <div class="flex items-center justify-center gap-5 mb-5" @click="closeDrawerGap(false)">
         <img
           class="opacity-40 cursor-pointer rotate-180 hover:opacity-100 transition hover:-translate-x-1"
           src="/arrow.svg"
@@ -46,7 +52,7 @@ const closeDrawerGap = () => {
           :title="drawerCartItem.name"
           :imgUrl="drawerCartItem.thumbnailUrl"
           :price="drawerCartItem.defaultDisplayedPriceFormatted"
-          @click="closeDrawerGap"
+          @click="closeDrawerGap(false)"
         />
         <div
           v-for="option in drawerCartItem.selectedOptions"
@@ -56,16 +62,28 @@ const closeDrawerGap = () => {
           {{ option.name }} {{ option.state.find((choice) => choice.active).text }}
         </div>
       </div>
+      <div class="mt-5 font-body">
+        <router-link
+          to="/cart"
+          class="block text-center bg-lime-500 mt-3 w-full rounded-lg py-2 text-white font-semibold hover:bg-lime-600 active:bg-lime-700 cursor-pointer"
+          @click="closeDrawerGap(false)"
+        >
+          Перейти в корзину
+        </router-link>
+      </div>
     </div>
-
-    <div class="mt-5 font-body">
-      <router-link
-        to="/cart"
-        class="block text-center bg-lime-500 mt-3 w-full rounded-lg py-2 text-white font-semibold hover:bg-lime-600 active:bg-lime-700 cursor-pointer"
-        @click="closeDrawerGap"
-      >
-        Перейти в корзину
-      </router-link>
-    </div>
+    <div
+      ref="drawerSwipe"
+      class="grow -mx-8 -mb-8 mt-4"
+      @swipe="() => closeDrawerGap(true)"
+      @click="closeDrawerGap(true)"
+    ></div>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.animate-after-swipe {
+  right: -24rem !important;
+  transition: right 0.3s ease-in;
+}
+</style>

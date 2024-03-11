@@ -87,6 +87,7 @@ watch(cart, () => {
 })
 
 onMounted(async () => {
+  window.scrollTo({ top: 0 })
   if (store.getters.allProducts.length) {
     product.value = store.getters.allProducts.find((item) => item.id === +id)
   } else await fetchProduct()

@@ -1,10 +1,11 @@
 <script setup>
 import ShopProd from './ShopProd.vue'
 import CartPopUp from './CartPopUp.vue'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
-defineProps({
-  items: Array
+const props = defineProps({
+  items: Array,
+  drawerOpen: Boolean
 })
 
 const popUpOpen = ref(false)
@@ -19,6 +20,10 @@ const openPopUp = (item) => {
 const closePopUp = () => {
   popUpOpen.value = false
 }
+
+watch(popUpOpen, () => {
+  document.body.style.overflow = popUpOpen.value || props.drawerOpen ? 'hidden' : 'visible'
+})
 </script>
 
 <template>
@@ -52,7 +57,7 @@ const closePopUp = () => {
   grid-template: repeat(1, 1fr) / repeat(4, 1fr);
   column-gap: clamp(24px, 2.4vw, 38px);
   row-gap: clamp(44px, 3vw, 40px);
-  margin-top: clamp(10px, 2vw, 46px);
+  margin-top: clamp(24px, 2vw, 46px);
 
   @media (max-width: 860px) {
     grid-template: repeat(1, 1fr) / repeat(3, 1fr);
