@@ -106,84 +106,86 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section v-if="Object.keys(product).length" class="my-8 font-body">
-    <div class="mx-auto max-w-6xl py-6 px-8">
-      <div class="product__wrapper">
-        <div class="product__img">
-          <img :src="product.hdThumbnailUrl" :alt="product.name" />
-        </div>
-        <div class="product__content">
-          <h1 class="text-2xl font-body font-bold" style="text-align: start">
-            {{ product.name }}
-          </h1>
-          <div class="product__cost">{{ product.defaultDisplayedPriceFormatted }}</div>
-          <div v-if="productOptionsLength" class="product__options">
-            <div v-for="(option, index) in product.options" :key="option.name">
-              <h2>{{ option.name }}</h2>
-              <div
-                v-for="(choice, i) in option.choices"
-                :key="choice.text"
-                class="flex gap-x-2 items-center mb-2"
-              >
-                <div class="product__radio">
-                  <input
-                    type="radio"
-                    :id="choice.text"
-                    name="choice"
-                    :checked="selectedOptions[index]?.state[i].active"
-                    @change="changeSelectOption(index, i)"
-                  />
-                  <div class="product__radio-inner"></div>
+  <div>
+    <section v-if="Object.keys(product).length" class="my-8 font-body">
+      <div class="mx-auto max-w-6xl py-6 px-8">
+        <div class="product__wrapper">
+          <div class="product__img">
+            <img :src="product.hdThumbnailUrl" :alt="product.name" />
+          </div>
+          <div class="product__content">
+            <h1 class="text-2xl font-body font-bold" style="text-align: start">
+              {{ product.name }}
+            </h1>
+            <div class="product__cost">{{ product.defaultDisplayedPriceFormatted }}</div>
+            <div v-if="productOptionsLength" class="product__options">
+              <div v-for="(option, index) in product.options" :key="option.name">
+                <h2>{{ option.name }}</h2>
+                <div
+                  v-for="(choice, i) in option.choices"
+                  :key="choice.text"
+                  class="flex gap-x-2 items-center mb-2"
+                >
+                  <div class="product__radio">
+                    <input
+                      type="radio"
+                      :id="choice.text"
+                      name="choice"
+                      :checked="selectedOptions[index]?.state[i].active"
+                      @change="changeSelectOption(index, i)"
+                    />
+                    <div class="product__radio-inner"></div>
+                  </div>
+                  <label :for="choice.text">{{ choice.text }}</label>
                 </div>
-                <label :for="choice.text">{{ choice.text }}</label>
               </div>
             </div>
-          </div>
-          <div class="product__btns">
-            <div v-if="cartItemsSameId.length">
-              <div class="product__cart-info">
-                Товаров в корзине:
-                {{ cartItemsSameId.reduce((acc, item) => acc + item.isAdded, 0) }}
+            <div class="product__btns">
+              <div v-if="cartItemsSameId.length">
+                <div class="product__cart-info">
+                  Товаров в корзине:
+                  {{ cartItemsSameId.reduce((acc, item) => acc + item.isAdded, 0) }}
+                </div>
+                <button class="product__add" @click="addOrChangeCart">
+                  <span class="product__add-caption">Добавить еще</span>
+                  <span class="product__check">
+                    <img src="/check-mark.svg" alt="" />
+                  </span>
+                </button>
               </div>
-              <button class="product__add" @click="addOrChangeCart">
-                <span class="product__add-caption">Добавить еще</span>
-                <span class="product__check">
-                  <img src="/check-mark.svg" alt="" />
-                </span>
+              <button
+                v-if="cartItemsSameId.length"
+                class="product__cart"
+                @click="router.push({ name: 'MainCart' })"
+              >
+                <span>Корзина</span>
+              </button>
+              <button
+                v-else
+                class="product__cart"
+                @click="
+                  () => {
+                    if (!btnDisabled) addToCart(product, 1, selectedOptions)
+                  }
+                "
+              >
+                <span>В корзину</span>
               </button>
             </div>
-            <button
-              v-if="cartItemsSameId.length"
-              class="product__cart"
-              @click="router.push({ name: 'MainCart' })"
-            >
-              <span>Корзина</span>
-            </button>
-            <button
-              v-else
-              class="product__cart"
-              @click="
-                () => {
-                  if (!btnDisabled) addToCart(product, 1, selectedOptions)
-                }
-              "
-            >
-              <span>В корзину</span>
-            </button>
-          </div>
-          <div class="product__description">
-            <h2 class="font-bold">Информация о товаре</h2>
-            <p class="product__description--p" v-html="product.description"></p>
+            <div class="product__description">
+              <h2 class="font-bold">Информация о товаре</h2>
+              <p class="product__description--p" v-html="product.description"></p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
-  <div v-else>
-    <div v-if="itemErr" class="mx-auto max-w-6xl py-6 px-8">
-      <h2 class="text-center text-xl font-bold">
-        Ошибка загрузки! Товара не существует! {{ itemErr }}
-      </h2>
+    </section>
+    <div v-else>
+      <div v-if="itemErr" class="mx-auto max-w-6xl py-6 px-8">
+        <h2 class="text-center text-xl font-bold">
+          Ошибка загрузки! Товара не существует! {{ itemErr }}
+        </h2>
+      </div>
     </div>
   </div>
 </template>

@@ -50,38 +50,38 @@ watch(filters, fetchItems)
 </script>
 
 <template>
-  <ShopCategories :categories="categories" />
-  <section class="mt-7">
-    <div class="mx-auto max-w-6xl py-6 px-8">
-      <h1 class="text-center text-2xl font-bold text-gray-700 relative">Рекомендуемые товары</h1>
-
-      <div class="my-5 flex flex-col gap-y-3 sm:flex-row justify-center gap-x-2 lg:justify-end">
-        <SearchInput @onChangeSearchInput="onChangeSearchInput" />
-        <select
-          class="font-body px-2 py-1.5 sm:py-1 outline-none border rounded-md text-base font-normal bg-transparent shop__select"
-          @change="onChangeSelect"
-        >
-          <option value>{{ selectText }}</option>
-          <option value="PRICE_ASC">Сначала дешевые</option>
-          <option value="PRICE_DESC">Сначала дорогие</option>
-        </select>
+  <div>
+    <ShopCategories :categories="categories" />
+    <section class="mt-7">
+      <div class="mx-auto max-w-6xl py-6 px-8">
+        <h1 class="text-center text-2xl font-bold text-gray-700 relative">Рекомендуемые товары</h1>
+        <div class="my-5 flex flex-col gap-y-3 sm:flex-row justify-center gap-x-2 lg:justify-end">
+          <SearchInput @onChangeSearchInput="onChangeSearchInput" />
+          <select
+            class="font-body px-2 py-1.5 sm:py-1 outline-none border rounded-md text-base font-normal bg-transparent shop__select"
+            @change="onChangeSelect"
+          >
+            <option value>{{ selectText }}</option>
+            <option value="PRICE_ASC">Сначала дешевые</option>
+            <option value="PRICE_DESC">Сначала дорогие</option>
+          </select>
+        </div>
+        <ShopProducts
+          v-if="items.length"
+          :items="items"
+          :drawerOpen="drawerOpen"
+          @open-drawer="openDrawer"
+          @addToCart="addToCart"
+          @clearCart="clearCart"
+        />
+        <div v-else>
+          <h2 v-if="itemsErr" class="text-center text-xl font-bold text-red-700 relative">
+            Ошибка загрузки товаров! {{ itemsErr }}
+          </h2>
+        </div>
       </div>
-
-      <ShopProducts
-        v-if="items.length"
-        :items="items"
-        :drawerOpen="drawerOpen"
-        @open-drawer="openDrawer"
-        @addToCart="addToCart"
-        @clearCart="clearCart"
-      />
-      <div v-else>
-        <h2 v-if="itemsErr" class="text-center text-xl font-bold text-red-700 relative">
-          Ошибка загрузки товаров! {{ itemsErr }}
-        </h2>
-      </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </template>
 
 <style lang="scss" scoped>

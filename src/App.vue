@@ -140,8 +140,13 @@ provide('cartTotal', setTotalCart)
     @close-drawer="closeDrawer"
     :drawerCartItem="drawerCartItem"
   />
+
   <main class="my-8">
-    <router-view></router-view>
+    <router-view v-slot="{ Component }">
+      <transition name="page">
+        <component :is="Component" />
+      </transition>
+    </router-view>
   </main>
   <MyFooter class="mt-auto" />
 </template>
@@ -150,5 +155,14 @@ provide('cartTotal', setTotalCart)
 a:hover {
   opacity: 0.7;
   transition: opacity 0.3s;
+}
+
+.page-enter-active {
+  transition: all 0.4s;
+}
+
+.page-enter-from {
+  opacity: 0;
+  filter: blur(1rem);
 }
 </style>
