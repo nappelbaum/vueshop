@@ -8,7 +8,21 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        body: ['Montserrat']
+        body: [
+          'Montserrat',
+          '-apple-system',
+          'BlinkMacSystemFont',
+          'Segoe UI',
+          'Roboto',
+          'Arial',
+          'Noto Sans',
+          'Liberation Sans',
+          'sans-serif',
+          'Apple Color Emoji',
+          'Segoe UI Emoji',
+          'Segoe UI Symbol',
+          'Noto Color Emoji'
+        ]
       },
       keyframes: {
         drawerOpacity: {

@@ -10,7 +10,11 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
   },
+  "browserslist": [
+    "cover 99%"
+  ],
   "dependencies": {
+    "@vueuse/core": "^10.9.0",
     "axios": "^1.6.7",
     "lodash.debounce": "^4.0.8",
     "vue": "^3.4.15",

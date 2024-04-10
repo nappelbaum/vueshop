@@ -93,5 +93,57 @@ export default class PostService {
       return err.message
     }
   }
+
+  static async testWP(data) {
+    try {
+      const res = await axios.post('https://vueshop.bohohome.ru/php/wp.php', data)
+      return res.data
+    } catch (err) {
+      return err.message
+    }
+  }
+
+  // static async setImages(array) {
+  //   const promises = array.map(async (post) => {
+  //     if (post?._links['wp:featuredmedia']) {
+  //       const images = await axios(post?._links['wp:featuredmedia'][0]?.href)
+  //       return {
+  //         ...post,
+  //         imgs: images.data
+  //       }
+  //     } else return post
+  //   })
+
+  //   const res = await Promise.all(promises)
+  //   return res
+  // }
+
+  static async getSkillsWP() {
+    try {
+      const res = await axios('https://aroma.bohohome.ru/wp-json/wp/v2/posts/')
+      return res.data
+    } catch (err) {
+      return err.message
+    }
+  }
+
+  static async getMediaWP() {
+    try {
+      const res = await axios('https://aroma.bohohome.ru/wp-json/wp/v2/media/')
+      return res.data
+    } catch (err) {
+      return err.message
+    }
+  }
+
+  static async getSkillsWithMediaWP() {
+    try {
+      const promises = [PostService.getSkillsWP(), PostService.getMediaWP()]
+      const res = await Promise.all(promises)
+      return res
+    } catch (err) {
+      return err.message
+    }
+  }
 }
 </script>

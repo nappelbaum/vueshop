@@ -26,9 +26,9 @@ const onChangeSearchInput = debounce((e) => {
   filters.searchQuery = e.target.value
 }, 500)
 
-const onChangeSelect = (e) => {
-  filters.sortBy = e.target.value
-}
+// const onChangeSelect = (e) => {
+//   filters.sortBy = e.target.value
+// }
 
 const fetchCategories = async () => {
   categories.value = await PostService.getCategories()
@@ -56,15 +56,8 @@ watch(filters, fetchItems)
       <div class="mx-auto max-w-6xl py-6 px-8">
         <h1 class="text-center text-2xl font-bold text-gray-700 relative">Рекомендуемые товары</h1>
         <div class="my-5 flex flex-col gap-y-3 sm:flex-row justify-center gap-x-2 lg:justify-end">
-          <SearchInput @onChangeSearchInput="onChangeSearchInput" />
-          <select
-            class="font-body px-2 py-1.5 sm:py-1 outline-none border rounded-md text-base font-normal bg-transparent shop__select"
-            @change="onChangeSelect"
-          >
-            <option value>{{ selectText }}</option>
-            <option value="PRICE_ASC">Сначала дешевые</option>
-            <option value="PRICE_DESC">Сначала дорогие</option>
-          </select>
+          <search-input @onChangeSearchInput="onChangeSearchInput" />
+          <u-select :selectText="selectText" v-model:select="filters.sortBy" />
         </div>
         <ShopProducts
           v-if="items.length"

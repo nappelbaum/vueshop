@@ -46,6 +46,7 @@ watch(formInputs, () => store.dispatch('clearAuthWarning'))
           >
           <div class="mt-2">
             <input
+              v-focus
               v-model="formInputs.email"
               id="email"
               name="email"
